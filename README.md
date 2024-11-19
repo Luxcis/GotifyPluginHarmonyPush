@@ -1,29 +1,34 @@
-# gotify/plugin-template [![](https://travis-ci.org/gotify/plugin-template.svg?branch=master)](https://travis-ci.org/gotify/plugin-template)
+# Gotify Plugin Harmony Push
 
-A plugin template for [gotify/server](https://github.com/gotify/server)
-using [gotify/plugin-api](https://github.com/gotify/plugin-api).
+This Gotify plugin forwards all received messages to Harmony Client.
 
-## Getting Started
+## Prerequisite
 
-1. Clone, fork or copy this repository.
-1. Change `PLUGIN_NAME` in [Makefile](Makefile).
-1. Setup building on every release
-   * Enable travis-ci in your repository.
-   * Add `GH_TOKEN` environment variable see [travis-ci docs](https://docs.travis-ci.com/user/deployment/pages/#setting-the-github-token).
-1. Implement your plugin. See [plugin docs](https://gotify.net/docs/plugin).
-1. Create a release to automatically build the plugin.
+- A Service Account Config File. You can get that information by following
+  this [doc](https://developer.huawei.com/consumer/cn/doc/start/api-0000001062522591#section11695162765311).
+- A Harmony Application Client Token. You can get that information by following
+  this [app](https://github.com/Luxcis/Gotify_Next).
+- Golang, Docker, wget (If you want to build the binary from source).
 
-*When you're done, feel free to add your plugin to [gotify/contrib](https://github.com/gotify/contrib).*
+## Installation
 
-## Building
+* **By shared object**
+    1. Get the compatible shared object from [release](https://github.com/Luxcis/GotifyPluginHarmonyPush/releases).
+    2. Put it into Gotify plugin folder.
+    3. Set secrets via environment variables (List of mandatory secrets is in [Appendix](#appendix)).
+    4. Restart gotify.
 
-For building the plugin gotify/build docker images are used to ensure compatibility with 
-[gotify/server](https://github.com/gotify/server).
+* **Build from source**
+    1. Change GOTIFY_VERSION in Makefile.
+    2. Build the binary. `make build`
+    3. Follow instructions from step 2 in the shared object installation.
 
-`GOTIFY_VERSION` can be a tag, commit or branch from the gotify/server repository.
+## Appendix
 
-This command builds the plugin for amd64, arm-7 and arm64. 
-The resulting shared object will be compatible with gotify/server version 2.0.20.
-```bash
-$ make GOTIFY_VERSION="v2.0.20" FILE_SUFFIX="for-gotify-v2.0.20" build
+Mandatory secrets.
+
+```(shell)
+GOTIFY_SERVER_PORT=YOUR_SERVER_PORT (depending on your setup, "80" will likely work by default)
+GOTIFY_CLIENT_TOKEN=YOUR_CLIENT_TOKEN (create a new Client in Gotify and use the Token from there, or you can use an existing client)
+HARMONY_CLIENT_TOKEN=YOUR_HARMONY_CLIEN_TOKEN (API token provided by Harmony App)
 ```

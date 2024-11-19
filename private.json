@@ -1,0 +1,10 @@
+{
+    "project_id": "*****",
+    "key_id": "*****",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIJQgIBADANBgkqhkiG9w0BAQEFAASCCSwwggkoAgEAAoICAQCKw6kJKtCh7qmMvp1u1dI27z2TKZrPOzHbQaXO/Eez0AWZ2EN+ouF496R3pfo7fQXC1XOT/YTbVC4DNZwWSMA54fu3/AOCY9Zzyi46OK*****==\n-----END PRIVATE KEY-----\n",
+    "sub_account": "*****",
+    "auth_uri": "https://oauth-login.cloud.huawei.com/oauth2/v3/authorize",
+    "token_uri": "https://oauth-login.cloud.huawei.com/oauth2/v3/token",
+    "auth_provider_cert_uri": "https://oauth-login.cloud.huawei.com/oauth2/v3/certs",
+    "client_cert_uri": "https://oauth-login.cloud.huawei.com/oauth2/v3/x509?client_id=*****"
+}
