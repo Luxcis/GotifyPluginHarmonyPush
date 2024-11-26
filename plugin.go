@@ -35,6 +35,7 @@ type Plugin struct {
 	clientToken string
 	gotifyPort  string
 	gotifyToken string
+	gotifyURL   string
 	iconMap     map[uint32]string
 	jwt         JwtJson
 }
@@ -49,7 +50,7 @@ func (p *Plugin) sendMsgToHarmony(title string, msg string, icon string, appid u
 	data := Message{
 		Payload: Payload{
 			Notification: Notification{
-				Category: "MARKETING",
+				Category: "ACCOUNT",
 				Title:    title,
 				Body:     msg,
 				Image:    icon,
@@ -68,7 +69,7 @@ func (p *Plugin) sendMsgToHarmony(title string, msg string, icon string, appid u
 			Token: []string{p.clientToken},
 		},
 		PushOptions: PushOptions{
-			TestMessage: true,
+			TestMessage: false,
 		},
 	}
 
@@ -101,20 +102,20 @@ func (p *Plugin) sendMsgToHarmony(title string, msg string, icon string, appid u
 	if resp.StatusCode == http.StatusOK {
 		p.debugLogger.Println("The message was forwarded successfully to Harmony")
 	} else {
-		// Log infor for debugging
-		p.debugLogger.Println("============== Request ==============")
-		prettyPrint, err := httputil.DumpRequest(req, true)
-		if err != nil {
-			p.debugLogger.Printf("%v\n", err)
-		}
-		p.debugLogger.Printf(string(prettyPrint))
-		p.debugLogger.Printf("%v\n", backupBody)
-
-		p.debugLogger.Println("============== Response ==============")
-		bodyBytes, err := io.ReadAll(resp.Body)
-		p.debugLogger.Printf("%v\n", string(bodyBytes))
-
+		p.debugLogger.Println("The message was forwarded failed to Harmony")
 	}
+	// Log infor for debugging
+	p.debugLogger.Println("============== Request ==============")
+	prettyPrint, err := httputil.DumpRequest(req, true)
+	if err != nil {
+		p.debugLogger.Printf("%v\n", err)
+	}
+	p.debugLogger.Printf(string(prettyPrint))
+	p.debugLogger.Printf("%v\n", backupBody)
+
+	p.debugLogger.Println("============== Response ==============")
+	bodyBytes, err := io.ReadAll(resp.Body)
+	p.debugLogger.Printf("%v\n", string(bodyBytes))
 
 	defer resp.Body.Close()
 }
@@ -177,7 +178,7 @@ func (p *Plugin) getIconByAppid(appid uint32) string {
 			p.iconMap[app.ID] = app.Image
 		}
 	}
-	return p.iconMap[appid]
+	return p.gotifyURL + p.iconMap[appid]
 }
 
 // SetMessageHandler implements plugin.Messenger
@@ -206,6 +207,7 @@ func NewGotifyPluginInstance(ctx plugin.UserContext) plugin.Plugin {
 		clientToken: os.Getenv("HARMONY_CLIENT_TOKEN"),
 		gotifyPort:  os.Getenv("GOTIFY_SERVER_PORT"),
 		gotifyToken: os.Getenv("GOTIFY_CLIENT_TOKEN"),
+		gotifyURL:   os.Getenv("GOTIFY_SERVER_URL"),
 		iconMap:     make(map[uint32]string),
 		jwt:         readJwtJsonFile(),
 	}
